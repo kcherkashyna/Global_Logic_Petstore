@@ -6,9 +6,10 @@ Functional Requirements: user should be able to find pets by status
 
 ### Test Scenario Positive
 
-**1** User find pets by status
+**1** User finds pets by status
 ```gherkin
-Given Created pet object with one of these statuses: available, pending, sold
+Given Create pet object with one of these statuses: available, pending, sold
+    And Status parameter is specified in request
 When Get request is sent
 Then Status code 200
 ```
@@ -16,7 +17,21 @@ Then Status code 200
 
 **2** User tries to find pets with non-existent status
 ```gherkin
-Given Created pet object with non-existent status
+Given Create pet object with non-existent status
 When Get request is sent
-Then Status code 400. Invalid status value
+Then Status code 400
+```
+
+**3** User tries to find pets with empty status
+```gherkin
+Given Create pet object with empty status
+When Get request is sent
+Then Status code 404
+```
+
+**4** User tries to find pets with valid status using invalid method
+```gherkin
+Given Create pet object with valid status
+When Patch request is sent
+Then Status code 405
 ```

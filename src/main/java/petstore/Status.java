@@ -4,7 +4,9 @@ public enum Status {
 
         available("available"),
         pending("pending"),
-        sold("sold");
+        sold("sold"),
+        invalidStatus("invalidStatus"),
+        nullStatus(null);
 
         private String value;
 

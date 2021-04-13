@@ -3,22 +3,21 @@ package petstore;
 import java.util.Objects;
 
 public class Tag {
-    private Integer id;
+    private String id;
     private String name;
 
-    public Tag(Integer id, String name) {
+    public Tag(String id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Tag() {
-    }
+    public Tag() {}
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -51,4 +50,5 @@ public class Tag {
         return Objects.equals(this.id, tag.id) &&
                 Objects.equals(this.name, tag.name);
     }
+
 }

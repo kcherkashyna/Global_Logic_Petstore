@@ -1,20 +1,22 @@
 package utils;
 
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import petstore.Pet;
 import petstore.Status;
 
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static utils.Constants.PET_ENDPOINT;
 
 public class PetsController {
-    public static String PET_ENDPOINT = Constants.BASE_URL + "/pet";
     private RequestSpecification requestSpecification;
+    private ResponseSpecification responseSpecification;
 
     public PetsController() {
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
@@ -22,22 +24,60 @@ public class PetsController {
         requestSpecBuilder.setContentType(ContentType.JSON);
         requestSpecBuilder.log(LogDetail.ALL);
         requestSpecification = requestSpecBuilder.build();
+        responseSpecification = new ResponseSpecBuilder().expectContentType(ContentType.JSON).build();
     }
 
-    public Pet addNewPet(Pet pet) {
-        return given(requestSpecification)
-                .body(pet)
-                .post(PET_ENDPOINT).as(Pet.class);
+    public Pet addNewPet(Pet pet, String method) {
+        if (method == "post") {
+            given(requestSpecification)
+                    .body(pet)
+                    .post(PET_ENDPOINT).as(Pet.class);
+        } else {
+            given(requestSpecification)
+                    .body(pet)
+                    .patch(PET_ENDPOINT).as(Pet.class);
+        }
+        return pet;
     }
 
-    public List<Pet> getPetsByStatus(Status status) {
-        return given(requestSpecification)
-                .queryParam("status", Status.available.toString())
-                .get(PET_ENDPOINT + "/findByStatus")
-                .then().log().all()
-                .extract().body()
-                .jsonPath().getList("", Pet.class);
-
+    public void getPetsByStatus(Pet pet, String status, String method, int code) {
+        if (status == "1" && method == "get") {
+            given(requestSpecification)
+                    .queryParam("status", Status.available.toString())
+                    .get(PET_ENDPOINT + "/findByStatus")
+                    .then().log().all()
+                    .assertThat().spec(responseSpecification).and().statusCode(code);
+        } else if (status == "2" && method == "get") {
+            given(requestSpecification)
+                    .queryParam("status", Status.pending.toString())
+                    .get(PET_ENDPOINT + "/findByStatus")
+                    .then().log().all()
+                    .assertThat().spec(responseSpecification).and().statusCode(code);
+        } else if (status == "3" && method == "get") {
+            given(requestSpecification)
+                    .queryParam("status", Status.sold.toString())
+                    .get(PET_ENDPOINT + "/findByStatus")
+                    .then().log().all()
+                    .assertThat().spec(responseSpecification).and().statusCode(code);
+        } else if (status == "4" && method == "get") {
+            given(requestSpecification)
+                    .queryParam("status", Status.invalidStatus.toString())
+                    .get(PET_ENDPOINT + "/findByStatus")
+                    .then().log().all()
+                    .assertThat().spec(responseSpecification).and().statusCode(code);
+        } else if (status == "" && method == "get") {
+            given(requestSpecification)
+                    .queryParam("status", "")
+                    .get(PET_ENDPOINT + "/findByStatus")
+                    .then().log().all()
+                    .assertThat().spec(responseSpecification).and().statusCode(code);
+        } else {
+            given(requestSpecification)
+                    .queryParam("status", Status.available.toString())
+                    .patch(PET_ENDPOINT + "/findByStatus")
+                    .then().log().all()
+                    .assertThat().statusCode(code);
+        }
     }
 
     public void deletePet(Pet pet) {
@@ -54,10 +94,17 @@ public class PetsController {
                 .body(containsString("Pet not found"));
     }
 
-    public Pet findPet(Pet pet) {
-        return given(requestSpecification)
-                .pathParam("petId", pet.getId())
-                .get(PET_ENDPOINT + "/{petId}").as(Pet.class);
+    public Pet findPetById(Pet pet, String method) {
+        if (method == "get") {
+            given(requestSpecification)
+                    .pathParam("petId", pet.getId())
+                    .get(PET_ENDPOINT + "/{petId}").as(Pet.class);
+        } else {
+            given(requestSpecification)
+                    .pathParam("petId", pet.getId())
+                    .patch(PET_ENDPOINT + "/{petId}").as(Pet.class);
+        }
+        return pet;
     }
 
     public Pet updatePet(Pet pet) {
@@ -72,5 +119,11 @@ public class PetsController {
                 .post(PET_ENDPOINT + "/{petId}").as(Pet.class);
     }
 
+    public void verifyStatusCode(Pet pet, int code) {
+        given(requestSpecification)
+                .pathParam("petId", pet.getId())
+                .get(PET_ENDPOINT + "/{petId}")
+                .then().statusCode(code);
+    }
 
 }

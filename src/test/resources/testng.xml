@@ -1,18 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
-    <test verbose="2" preserve-order="true"
-          name="C:/Users/kateryna.cherkashyna/IdeaProjects/Global_Logic_Petstore/src/test">
+    <test verbose="2" preserve-order="true" name="C:/Users/kateryna.cherkashyna/IdeaProjects/Global_Logic_Petstore">
         <classes>
-            <class name="test.PetTests">
+            <class name="test.AddNewPetTest">
                 <methods>
                     <include name="addNewPet"/>
-                    <include name="verifyNewPet"/>
+                    <include name="addNewPetWithInvalidId"/>
+                    <include name="addNewPetWithEmptyName"/>
+                    <include name="addNewPetWithInvalidMethod"/>
+                </methods>
+            </class>
+            <class name="test.FindPetByIdTest">
+                <methods>
+                    <include name="findPet"/>
+                    <include name="findPetWithInvalidParameter"/>
+                    <include name="findPetWithEmptyParameter"/>
+                    <include name="findPetWithInvalidMethod"/>
+                </methods>
+            </class>
+            <class name="test.FindPetsByStatusTest">
+                <methods>
+                    <include name="findPetsByStatusAvailable"/>
+                    <include name="findPetsByStatusPending"/>
+                    <include name="findPetsByStatusSold"/>
+                    <include name="findPetsByInvalidStatus"/>
+                    <include name="findPetsByEmptyStatus"/>
+                    <include name="findPetsWithInvalidMethod"/>
+                </methods>
+            </class>
+            <class name="test.UpdateAnExistingPetTest">
+                <methods>
                     <include name="updatePet"/>
-                    <include name="verifyUpdatedPet"/>
+                    <include name="updatePetWithInvalidParameters"/>
+                    <include name="updatePetWithEmptyParameters"/>
+                    <include name="updatePetWithInvalidMethod"/>
+                </methods>
+            </class>
+            <class name="test.UpdateUsingPostMethodTest">
+                <methods>
+                    <include name="updatePet"/>
+                    <include name="updatePetWithInvalidParameters"/>
+                    <include name="updatePetWithEmptyParameters"/>
+                    <include name="updatePetWithInvalidMethod"/>
+                </methods>
+            </class>
+            <class name="test.DeleteAPetTest">
+                <methods>
                     <include name="deletePetAndDoCheck"/>
-                    <include name="findPetsByStatus"/>
-                    <include name="updatePetByPost"/>
+                    <include name="addNewPetWithInvalidId"/>
+                    <include name="addNewPetWithEmptyName"/>
                 </methods>
             </class>
         </classes>

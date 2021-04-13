@@ -2,15 +2,14 @@
 
 ### Requirements
 
-Functional Requirements: user should be able to update an existing pet
+Functional Requirements: user should be able to update a pet using post method
 
 ### Test Scenario Positive
 
-**1** User updates parameter(s) of the existing pet
+**1** User updates a pet parameter(s)
 ```gherkin
-Given Create new pet object with valid input parameters: id, category, name, photoUrls, tags, status
-    And Update the parameter(s)
-When Put request is sent
+Given Create and update pet object
+When Post request is sent
 Then Status code 200
     And Response properties correspond to the expected
     And Response pet object parameters id, name, status correspond to the expected
@@ -19,14 +18,14 @@ Then Status code 200
 
 **2** User tries to update a pet using invalid parameter(s)
 ```gherkin
-Given Create pet object with invalid parameter(s)
-When Put request is sent
+Given Create and update pet object with invalid parameter(s)
+When Post request is sent
 Then Status code 400
 ```
 
 **3** User tries to update a pet using empty parameter(s)
 ```gherkin
-Given Create pet object with empty parameter(s)
-When Put request is sent
+Given Create and update pet object with empty parameter(s)
+When Post request is sent
 Then Status code 404
 ```

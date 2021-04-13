@@ -8,23 +8,23 @@ Functional Requirements: user should be able to delete a pet
 
 **1** User deletes pet by id
 ```gherkin
-Given Created pet object
-    And api_key and petId are specified
+Given Create pet object
 When Delete request is sent
 Then Status code 200
 ```
 ### Test Scenario Negative
 
-**2** User tries to delete pet using non-existent petId
+**2** User tries to delete pet with invalid petId
 ```gherkin
-Given Created pet object
+Given Create pet object
     And Invalid petId is specified
 When Delete request is sent
-Then Status code 400. Invalid ID supplied
+Then Status code 400
 ```
-**3** User tries to delete pet using invalid parameter(s)
+**3** User tries to delete pet with empty petId
 ```gherkin
-Given Created pet object with using invalid parameter(s)
+Given Create pet object
+    And Empty petId is specified
 When Delete request is sent
-Then Status code 404. Pet not found
+Then Status code 404
 ```

@@ -3,10 +3,10 @@ package petstore;
 import java.util.Objects;
 
 public class Category {
-    private Integer id = null;
-    private String name = null;
+    private String id;
+    private String name;
 
-    public Category(Integer id, String name) {
+    public Category(String id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -14,11 +14,11 @@ public class Category {
     public Category() {
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -30,26 +30,20 @@ public class Category {
         this.name = name;
     }
 
+
     @Override
     public String toString() {
-        return "petstore.Category{" +
-                "id=" + id +
+        return "Category{" +
+                "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Category category = (Category) o;
-
-        return Objects.equals(this.id, category.id) &&
-                Objects.equals(this.name, category.name);
+        return Objects.equals(id, category.id) && Objects.equals(name, category.name);
     }
-
 }
