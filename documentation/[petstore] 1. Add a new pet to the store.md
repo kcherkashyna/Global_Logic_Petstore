@@ -11,8 +11,7 @@ Functional Requirements: user should be able to add a new pet
 Given Create new pet object with valid input parameters: id, category, name, photoUrls, tags, status
 When Post request is sent
 Then Status code 200
-    And Response properties correspond to the expected
-    And Response pet object parameters id, name, status correspond to the expected
+    And Response pet object parameters correspond to the preassigned pet object parameters
 ```
 ### Test Scenario Negative
 **2** User tries to add a new pet to the store with invalid parameter(s)
@@ -30,6 +29,6 @@ Then Status code 404
 **4** User tries to add a new pet to the store with invalid method
 ```gherkin
 Given Create new pet object with valid input parameters
-When Patch request is sent
+When Head request is sent
 Then Status code 405
 ```

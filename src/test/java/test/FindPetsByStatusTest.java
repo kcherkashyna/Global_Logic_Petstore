@@ -7,17 +7,20 @@ import petstore.Pet;
 import petstore.Status;
 import petstore.Tag;
 import utils.PetsController;
+import utils.UnreservedMethods;
 
 import java.util.Collections;
+
+import static java.net.HttpURLConnection.*;
 
 public class FindPetsByStatusTest {
     private static final String PHOTO_URL = "https://en.wikipedia.org/wiki/Pallas%27s_cat#/media/File:Manoel.jpg";
     private PetsController petsController;
     private Pet pet;
-    private String id = "1";
-    private String petName = "Baaaarsik";
-    private String categoryName = "cats";
-    private String tagName = "pallas's cat";
+    private static final String id = "1";
+    private static final String petName = "Baaaarsik";
+    private static final String categoryName = "cats";
+    private static final String tagName = "pallas's cat";
 
     @BeforeMethod
     public void beforeMethod() {
@@ -33,34 +36,34 @@ public class FindPetsByStatusTest {
 
     @Test(description = "User finds pets by status available")
     public void findPetsByStatusAvailable() {
-        petsController.getPetsByStatus(pet, "1","get", 200);
+        petsController.getPetsByStatusAndCheckStatusCode(pet, Status.available, HTTP_OK);
     }
 
     @Test(description = "User finds pets by status pending")
     public void findPetsByStatusPending() {
-        petsController.getPetsByStatus(pet, "2","get", 200);
+        petsController.getPetsByStatusAndCheckStatusCode(pet, Status.pending, HTTP_OK);
     }
 
     @Test(description = "User finds pets by status sold")
     public void findPetsByStatusSold() {
-        petsController.getPetsByStatus(pet, "3","get", 200);
+        petsController.getPetsByStatusAndCheckStatusCode(pet, Status.sold, HTTP_OK);
     }
 
     @Test(description = "User tries to find pets with non-existent status")
     public void findPetsByInvalidStatus() {
         pet.setStatus(Status.invalidStatus);
-        petsController.getPetsByStatus(pet, "4", "get", 400);
+        petsController.getPetsByStatusAndCheckStatusCode(pet, Status.invalidStatus, HTTP_BAD_REQUEST);
     }
 
     @Test(description = "User tries to find pets with empty status")
     public void findPetsByEmptyStatus() {
         pet.setStatus(Status.nullStatus);
-        petsController.getPetsByStatus(pet, "", "get", 404);
+        petsController.getPetsByStatusAndCheckStatusCode(pet, Status.nullStatus, HTTP_NOT_FOUND);
     }
 
     @Test(description = "User tries to find pets with valid status using invalid method")
     public void findPetsWithInvalidMethod() {
-        petsController.getPetsByStatus(pet, "1", "patch", 405);
+        petsController.getPetsByStatusUsingWrongMethodAndCheckStatusCode(pet, UnreservedMethods.PATCH, HTTP_BAD_METHOD);
     }
 
 }

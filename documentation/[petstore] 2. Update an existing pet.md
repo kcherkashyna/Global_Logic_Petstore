@@ -12,8 +12,7 @@ Given Create new pet object with valid input parameters: id, category, name, pho
     And Update the parameter(s)
 When Put request is sent
 Then Status code 200
-    And Response properties correspond to the expected
-    And Response pet object parameters id, name, status correspond to the expected
+    And Response pet object parameters correspond to the preassigned pet object parameters
 ```
 ### Test Scenario Negative
 

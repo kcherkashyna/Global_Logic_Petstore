@@ -11,6 +11,7 @@ Functional Requirements: user should be able to delete a pet
 Given Create pet object
 When Delete request is sent
 Then Status code 200
+    And Check pet object is deleted: status code 404 after attempt to find the pet object
 ```
 ### Test Scenario Negative
 
@@ -19,7 +20,7 @@ Then Status code 200
 Given Create pet object
     And Invalid petId is specified
 When Delete request is sent
-Then Status code 400
+Then Status code 404
 ```
 **3** User tries to delete pet with empty petId
 ```gherkin
