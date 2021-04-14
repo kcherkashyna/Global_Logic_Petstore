@@ -1,8 +1,6 @@
 package test;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import petstore.Category;
@@ -13,18 +11,18 @@ import utils.PetsController;
 
 import java.util.Collections;
 
+import static java.net.HttpURLConnection.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.hamcrest.Matchers.equalTo;
 
 public class UpdateAnExistingPetTest {
     private static final String PHOTO_URL = "https://en.wikipedia.org/wiki/Pallas%27s_cat#/media/File:Manoel.jpg";
     private PetsController petsController;
     private Pet pet;
-    private String id = "1";
-    private String petName = "Baaaarsik";
-    private String categoryName = "cats";
-    private String tagName = "pallas's cat";
+    private static final String id = "1";
+    private static final String petName = "Baaaarsik";
+    private static final String categoryName = "cats";
+    private static final String tagName = "pallas's cat";
 
 
     @BeforeMethod
@@ -40,30 +38,25 @@ public class UpdateAnExistingPetTest {
     }
 
 
-    @Test(priority = 1, description = "User updates parameter(s) of the existing pet")
+    @Test(description = "User updates parameter(s) of the existing pet")
     public void updatePet() {
         pet.setName("Murka");
-        Pet petResponse = petsController.updatePet(pet);
-        petsController.verifyStatusCode(pet, 200);
-        assertThat(petResponse, is(samePropertyValuesAs(pet)));
-        Assert.assertEquals(pet.getId(), id);
+        Pet petResponse = petsController.updatePetAndCheckStatusCode(pet, HTTP_OK);
+        assertThat(petResponse, equalTo(pet));
         Assert.assertEquals(pet.getName(), "Murka");
-        Assert.assertEquals(pet.getStatus(), Status.available);
     }
 
-    @Test(priority = 2, description = "User tries to update a pet using invalid parameter(s)")
+    @Test(description = "User tries to update a pet using invalid parameter(s)")
     public void updatePetWithInvalidParameters() {
         pet.setId("-2");
-        pet.setName("Murka");
-        Pet petResponse = petsController.updatePet(pet);
-        petsController.verifyStatusCode(pet, 400);
+        pet.setName("Pushok");
+        petsController.updatePetAndCheckStatusCode(pet, HTTP_BAD_REQUEST);
     }
 
-    @Test(priority = 3, description = "User tries to update a pet using empty parameter(s)")
+    @Test(description = "User tries to update a pet using empty parameter(s)")
     public void updatePetWithEmptyParameters() {
         pet.setId("");
         pet.setName("");
-        Pet petResponse = petsController.updatePet(pet);
-        petsController.verifyStatusCode(pet, 404);
+        petsController.updatePetAndCheckStatusCode(pet, HTTP_NOT_FOUND);
     }
 }

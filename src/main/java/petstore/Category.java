@@ -6,7 +6,7 @@ public class Category {
     private String id;
     private String name;
 
-    public Category(String id, String name) {
+    public Category(final String id, final String name) {
         this.id = id;
         this.name = name;
     }
@@ -18,7 +18,7 @@ public class Category {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -26,7 +26,7 @@ public class Category {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 

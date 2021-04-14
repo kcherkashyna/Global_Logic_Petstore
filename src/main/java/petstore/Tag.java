@@ -6,18 +6,19 @@ public class Tag {
     private String id;
     private String name;
 
-    public Tag(String id, String name) {
+    public Tag(final String id, final String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Tag() {}
+    public Tag() {
+    }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -25,7 +26,7 @@ public class Tag {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 

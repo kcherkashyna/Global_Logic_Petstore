@@ -1,6 +1,5 @@
 package test;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import petstore.Category;
@@ -11,9 +10,8 @@ import utils.PetsController;
 
 import java.util.Collections;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import static java.net.HttpURLConnection.HTTP_OK;
 
 public class DeleteAPetTest {
     private static final String PHOTO_URL = "https://en.wikipedia.org/wiki/Pallas%27s_cat#/media/File:Manoel.jpg";
@@ -35,27 +33,36 @@ public class DeleteAPetTest {
         pet.setStatus(Status.available);
         pet.setTags(Collections.singletonList(new Tag(id, tagName)));
         pet.setCategory(new Category(id, categoryName));
+        petsController.addNewPetAndCheckStatusCode(pet, HTTP_OK);
     }
 
 
-    @Test(priority = 1, description = "User deletes pet by id")
+    @Test(description = "User deletes pet by id")
     public void deletePetAndDoCheck() {
-        petsController.deletePet(pet);
-        petsController.verifyPetDeleted(pet);
+        petsController.deletePetAndCheckStatusCode(pet, HTTP_OK);
+        petsController.verifyPetDeletedAndCheckStatusCode(pet, HTTP_NOT_FOUND);
     }
 
     @Test(description = "User tries to delete pet with invalid petId")
-    public void addNewPetWithInvalidId() {
+    public void deletePetWithInvalidParameter() {
         pet.setId("-7");
-        petsController.deletePet(pet);
-        petsController.verifyStatusCode(pet, 400);
+        pet.setName(petName);
+        pet.setPhotoUrls(Collections.singletonList(PHOTO_URL));
+        pet.setStatus(Status.available);
+        pet.setTags(Collections.singletonList(new Tag(id, tagName)));
+        pet.setCategory(new Category(id, categoryName));
+        petsController.deletePetAndCheckStatusCode(pet, HTTP_NOT_FOUND);
     }
 
-    @Test(priority = 3, description = "User tries to delete pet with empty petId")
-    public void addNewPetWithEmptyName() {
+    @Test(description = "User tries to delete pet with empty petId")
+    public void deletePetWithEmptyParameter() {
+        pet.setId(id);
         pet.setName("");
-        petsController.deletePet(pet);
-        petsController.verifyStatusCode(pet, 404);
+        pet.setPhotoUrls(Collections.singletonList(PHOTO_URL));
+        pet.setStatus(Status.available);
+        pet.setTags(Collections.singletonList(new Tag(id, tagName)));
+        pet.setCategory(new Category(id, categoryName));
+        petsController.deletePetAndCheckStatusCode(pet, HTTP_NOT_FOUND);
     }
 
 }

@@ -13,13 +13,14 @@ public class Pet {
     private List<Tag> tags = new ArrayList<>();
     private Status status;
 
-    public Pet() {}
+    public Pet() {
+    }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -27,7 +28,7 @@ public class Pet {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(final Category category) {
         this.category = category;
     }
 
@@ -35,7 +36,7 @@ public class Pet {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -43,7 +44,7 @@ public class Pet {
         return photoUrls;
     }
 
-    public void setPhotoUrls(List<String> photoUrls) {
+    public void setPhotoUrls(final List<String> photoUrls) {
         this.photoUrls = photoUrls;
     }
 
@@ -51,7 +52,7 @@ public class Pet {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(final List<Tag> tags) {
         this.tags = tags;
     }
 
@@ -59,7 +60,7 @@ public class Pet {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(final Status status) {
         this.status = status;
     }
 

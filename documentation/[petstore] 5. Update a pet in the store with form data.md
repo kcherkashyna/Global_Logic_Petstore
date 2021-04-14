@@ -11,8 +11,7 @@ Functional Requirements: user should be able to update a pet using post method
 Given Create and update pet object
 When Post request is sent
 Then Status code 200
-    And Response properties correspond to the expected
-    And Response pet object parameters id, name, status correspond to the expected
+And Response pet object parameters correspond to the preassigned pet object parameters
 ```
 ### Test Scenario Negative
 

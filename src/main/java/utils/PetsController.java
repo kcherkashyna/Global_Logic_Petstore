@@ -10,13 +10,17 @@ import petstore.Pet;
 import petstore.Status;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static utils.Constants.PET_ENDPOINT;
 
 public class PetsController {
     private RequestSpecification requestSpecification;
     private ResponseSpecification responseSpecification;
+    private static final String PET_STATUS = "status";
+    private static final String FIND_BY_STATUS_LINK = "/findByStatus";
+    private static final String PET_ID = "petId";
+    private static final String PET_ID_LINK = "/{petId}";
+
 
     public PetsController() {
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
@@ -25,107 +29,149 @@ public class PetsController {
         requestSpecBuilder.log(LogDetail.ALL);
         requestSpecification = requestSpecBuilder.build();
         responseSpecification = new ResponseSpecBuilder().expectContentType(ContentType.JSON).build();
+
     }
 
-    public Pet addNewPet(Pet pet, String method) {
-        if (method == "post") {
+    public Pet addNewPetAndCheckStatusCode(final Pet pet, final int code) {
+        given(requestSpecification)
+                .body(pet)
+                .post(PET_ENDPOINT).as(Pet.class);
+        responseSpecification.then().statusCode(code);
+        return pet;
+    }
+
+    public Pet addNewPetUsingWrongMethodAndCheckStatusCode(final Pet pet, final UnreservedMethods method, final int code) {
+        if (method.equals(UnreservedMethods.HEAD)) {
             given(requestSpecification)
                     .body(pet)
-                    .post(PET_ENDPOINT).as(Pet.class);
-        } else {
+                    .head(PET_ENDPOINT).as(Pet.class);
+            responseSpecification.then().statusCode(code);
+        } else if (method.equals(UnreservedMethods.PATCH)) {
             given(requestSpecification)
                     .body(pet)
                     .patch(PET_ENDPOINT).as(Pet.class);
+            responseSpecification.then().statusCode(code);
+        } else if (method.equals(UnreservedMethods.OPTIONS)) {
+            given(requestSpecification)
+                    .body(pet)
+                    .options(PET_ENDPOINT).as(Pet.class);
+            responseSpecification.then().statusCode(code);
         }
         return pet;
     }
 
-    public void getPetsByStatus(Pet pet, String status, String method, int code) {
-        if (status == "1" && method == "get") {
-            given(requestSpecification)
-                    .queryParam("status", Status.available.toString())
-                    //Constant
-                    .get(PET_ENDPOINT + "/findByStatus")
-                    .then().log().all()
-                    .assertThat().spec(responseSpecification).and().statusCode(code);
-            //Constant
-        } else if (status == "2" && method == "get") {
-            given(requestSpecification)
-                    .queryParam("status", Status.pending.toString())
-                    //Constant
-                    .get(PET_ENDPOINT + "/findByStatus")
-                    .then().log().all()
-                    .assertThat().spec(responseSpecification).and().statusCode(code);
-        } else if (status == "3" && method == "get") {
-            given(requestSpecification)
-                    .queryParam("status", Status.sold.toString())
-                    .get(PET_ENDPOINT + "/findByStatus")
-                    .then().log().all()
-                    .assertThat().spec(responseSpecification).and().statusCode(code);
-        } else if (status == "4" && method == "get") {
-            given(requestSpecification)
-                    .queryParam("status", Status.invalidStatus.toString())
-                    .get(PET_ENDPOINT + "/findByStatus")
-                    .then().log().all()
-                    .assertThat().spec(responseSpecification).and().statusCode(code);
-        } else if (status == "" && method == "get") {
-            given(requestSpecification)
-                    .queryParam("status", "")
-                    .get(PET_ENDPOINT + "/findByStatus")
-                    .then().log().all()
-                    .assertThat().spec(responseSpecification).and().statusCode(code);
-        } else {
-            given(requestSpecification)
-                    .queryParam("status", Status.available.toString())
-                    .patch(PET_ENDPOINT + "/findByStatus")
-                    .then().log().all()
-                    .assertThat().statusCode(code);
-        }
-    }
-
-    public void deletePet(Pet pet) {
+    public Pet updatePetAndCheckStatusCode(final Pet pet, final int code) {
         given(requestSpecification)
-                .pathParam("petId", pet.getId())
-                .delete(PET_ENDPOINT + "/{petId}");
-    }
-
-    public void verifyPetDeleted(Pet pet) {
-        given(requestSpecification)
-                .pathParam("petId", pet.getId())
-                .get(PET_ENDPOINT + "/{petId}")
-                .then()
-                .body(containsString("Pet not found"));
-    }
-
-    public Pet findPetById(Pet pet, String method) {
-        if (method == "get") {
-            given(requestSpecification)
-                    .pathParam("petId", pet.getId())
-                    .get(PET_ENDPOINT + "/{petId}").as(Pet.class);
-        } else {
-            given(requestSpecification)
-                    .pathParam("petId", pet.getId())
-                    .patch(PET_ENDPOINT + "/{petId}").as(Pet.class);
-        }
-        return pet;
-    }
-
-    public Pet updatePet(Pet pet) {
-        return given(requestSpecification)
                 .body(pet)
                 .put(PET_ENDPOINT).as(Pet.class);
+        responseSpecification.then().statusCode(code);
+        return pet;
     }
 
-    public Pet updatePetByPost(Pet pet) {
-        return given(requestSpecification)
-                .pathParam("petId", pet.getId())
-                .post(PET_ENDPOINT + "/{petId}").as(Pet.class);
+    public void getPetsByStatusAndCheckStatusCode(final Pet pet, final Status status, final int code) {
+        if (status.equals(Status.available)) {
+            given(requestSpecification)
+                    .queryParam(PET_STATUS, Status.available.toString())
+                    .get(PET_ENDPOINT + FIND_BY_STATUS_LINK)
+                    .then().statusCode(code);
+            //Constant
+        } else if (status.equals(Status.pending)) {
+            given(requestSpecification)
+                    .queryParam(PET_STATUS, Status.pending.toString())
+                    //Constant
+                    .get(PET_ENDPOINT + FIND_BY_STATUS_LINK)
+                    .then().statusCode(code);
+        } else if (status.equals(Status.sold)) {
+            given(requestSpecification)
+                    .queryParam(PET_STATUS, Status.sold.toString())
+                    .get(PET_ENDPOINT + FIND_BY_STATUS_LINK)
+                    .then().statusCode(code);
+        } else if (status.equals(Status.invalidStatus)) {
+            given(requestSpecification)
+                    .queryParam(PET_STATUS, Status.invalidStatus.toString())
+                    .get(PET_ENDPOINT + FIND_BY_STATUS_LINK)
+                    .then().statusCode(code);
+        } else if (status.equals(Status.nullStatus)) {
+            given(requestSpecification)
+                    .queryParam(PET_STATUS, Status.nullStatus)
+                    .get(PET_ENDPOINT + FIND_BY_STATUS_LINK)
+                    .then().statusCode(code);
+        }
     }
 
-    public void verifyStatusCode(Pet pet, int code) {
+    public void getPetsByStatusUsingWrongMethodAndCheckStatusCode(final Pet pet, final UnreservedMethods method, final int code) {
+        if (method.equals(UnreservedMethods.HEAD)) {
+            given(requestSpecification)
+                    .queryParam(PET_STATUS, Status.available.toString())
+                    .get(PET_ENDPOINT + FIND_BY_STATUS_LINK)
+                    .then().and().statusCode(code);
+        } else if (method.equals(UnreservedMethods.PATCH)) {
+            given(requestSpecification)
+                    .queryParam(PET_STATUS, Status.pending.toString())
+                    .get(PET_ENDPOINT + FIND_BY_STATUS_LINK)
+                    .then().statusCode(code);
+        } else if (method.equals(UnreservedMethods.OPTIONS)) {
+            given(requestSpecification)
+                    .queryParam(PET_STATUS, Status.sold.toString())
+                    .get(PET_ENDPOINT + FIND_BY_STATUS_LINK)
+                    .then().statusCode(code);
+        }
+    }
+
+    public Pet findPetByIdAndCheckStatusCode(final Pet pet, final int code) {
         given(requestSpecification)
-                .pathParam("petId", pet.getId())
-                .get(PET_ENDPOINT + "/{petId}")
+                .pathParam(PET_ID, pet.getId())
+                .get(PET_ENDPOINT + PET_ID_LINK).as(Pet.class);
+        responseSpecification.then().statusCode(code);
+        return pet;
+    }
+
+    public Pet findPetByIdUsingInvalidMethodAndCheckStatusCode(final Pet pet, final UnreservedMethods method, final int code) {
+        if (method.equals(UnreservedMethods.HEAD)) {
+            given(requestSpecification)
+                    .pathParam(PET_ID, pet.getId())
+                    .head(PET_ENDPOINT + PET_ID_LINK).as(Pet.class);
+            responseSpecification.then().statusCode(code);
+        } else if (method.equals(UnreservedMethods.PATCH)) {
+            given(requestSpecification)
+                    .pathParam(PET_ID, pet.getId())
+                    .patch(PET_ENDPOINT + PET_ID_LINK).as(Pet.class);
+            responseSpecification.then().statusCode(code);
+        } else if (method.equals(UnreservedMethods.OPTIONS)) {
+            given(requestSpecification)
+                    .pathParam(PET_ID, pet.getId())
+                    .options(PET_ENDPOINT + PET_ID_LINK).as(Pet.class);
+            responseSpecification.then().statusCode(code);
+        }
+        return pet;
+    }
+
+    public Pet updatePetWithFormDataAndCheckStatusCode(final Pet pet, final int code) {
+        given(requestSpecification)
+                .pathParam(PET_ID, pet.getId())
+                .post(PET_ENDPOINT + PET_ID_LINK).as(Pet.class);
+        responseSpecification.then().statusCode(code);
+        return pet;
+    }
+
+    public void deletePetAndCheckStatusCode(final Pet pet, final int code) {
+        given(requestSpecification)
+                .pathParam(PET_ID, pet.getId())
+                .delete(PET_ENDPOINT + PET_ID_LINK)
+                .then().statusCode(code);
+    }
+
+    public void verifyPetDeletedAndCheckStatusCode(final Pet pet, final int code) {
+        given(requestSpecification)
+                .pathParam(PET_ID, pet.getId())
+                .get(PET_ENDPOINT + PET_ID_LINK)
+                .then().statusCode(code).and().body(containsString("Pet not found"));
+    }
+
+    public void getPetAndVerifyStatusCode(final Pet pet, final int code) {
+        given(requestSpecification)
+                .pathParam(PET_ID, pet.getId())
+                .get(PET_ENDPOINT + PET_ID_LINK)
                 .then().statusCode(code);
     }
 
