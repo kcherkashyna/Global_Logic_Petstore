@@ -1,8 +1,6 @@
 package test;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import petstore.Category;
@@ -13,14 +11,16 @@ import utils.PetsController;
 
 import java.util.Collections;
 
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.hamcrest.Matchers.*;
 
 public class AddNewPetTest {
     private static final String PHOTO_URL = "https://en.wikipedia.org/wiki/Pallas%27s_cat#/media/File:Manoel.jpg";
     private PetsController petsController;
     private Pet pet;
+    //TODO replace with constants
     private String id = "1";
     private String petName = "Baaaarsik";
     private String categoryName = "cats";
@@ -44,24 +44,28 @@ public class AddNewPetTest {
     public void addNewPet() {
         Pet petResponse = petsController.addNewPet(pet, "post");
         petsController.verifyStatusCode(pet, 200);
-        assertThat(petResponse, is(samePropertyValuesAs(pet)));
-        Assert.assertEquals(pet.getId(), id);
-        Assert.assertEquals(pet.getName(), petName);
-        Assert.assertEquals(pet.getStatus(), Status.available);
+        assertThat(petResponse, equalTo(pet));
+        assertThat(petResponse, is(pet));
+        assertThat(petResponse.getId(), is(pet.getId()));
+
+
+//        Assert.assertEquals(pet.getId(), id);
+//        Assert.assertEquals(pet.getName(), petName);
+//        Assert.assertEquals(pet.getStatus(), Status.available);
     }
 
     @Test(priority = 2, description = "User tries to add a new pet to the store with invalid parameter(s)")
     public void addNewPetWithInvalidId() {
         pet.setId("-7");
         Pet petResponse = petsController.addNewPet(pet, "post");
-        petsController.verifyStatusCode(pet, 400);
+        petsController.verifyStatusCode(pet, HTTP_BAD_REQUEST);
     }
 
     @Test(priority = 3, description = "User tries to add a new pet to the store with empty parameter(s)")
     public void addNewPetWithEmptyName() {
         pet.setName("");
         Pet petResponse = petsController.addNewPet(pet, "post");
-        petsController.verifyStatusCode(pet, 404);
+        petsController.verifyStatusCode(pet, HTTP_NOT_FOUND);
     }
 
     @Test(priority = 4, description = "User tries to add a new pet to the store with invalid method")

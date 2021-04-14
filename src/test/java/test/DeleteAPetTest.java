@@ -44,7 +44,7 @@ public class DeleteAPetTest {
         petsController.verifyPetDeleted(pet);
     }
 
-    @Test(priority = 2, description = "User tries to delete pet with invalid petId")
+    @Test(description = "User tries to delete pet with invalid petId")
     public void addNewPetWithInvalidId() {
         pet.setId("-7");
         petsController.deletePet(pet);
