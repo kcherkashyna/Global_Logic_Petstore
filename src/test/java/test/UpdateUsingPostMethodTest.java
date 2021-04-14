@@ -38,7 +38,7 @@ public class UpdateUsingPostMethodTest {
     }
 
 
-    @Test(priority = 1, description = "User updates parameter(s) of the existing pet")
+    @Test(description = "User updates parameter(s) of the existing pet")
     public void updatePet() {
         pet.setStatus(Status.sold);
         Pet petResponse = petsController.updatePetByPost(pet);
@@ -48,7 +48,7 @@ public class UpdateUsingPostMethodTest {
         Assert.assertEquals(pet.getStatus(), Status.sold);
     }
 
-    @Test(priority = 2, description = "User tries to update a pet using invalid parameter(s)")
+    @Test(description = "User tries to update a pet using invalid parameter(s)")
     public void updatePetWithInvalidParameters() {
         pet.setId("-22");
         pet.setName("Garfild");
@@ -56,7 +56,7 @@ public class UpdateUsingPostMethodTest {
         petsController.verifyStatusCode(pet, 400);
     }
 
-    @Test(priority = 3, description = "User tries to update a pet using empty parameter(s)")
+    @Test(description = "User tries to update a pet using empty parameter(s)")
     public void updatePetWithEmptyParameters() {
         pet.setName("");
         Pet petResponse = petsController.updatePetByPost(pet);

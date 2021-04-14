@@ -37,7 +37,7 @@ public class FindPetByIdTest {
         pet.setCategory(new Category(id, categoryName));
     }
 
-    @Test(priority = 1, description = "User finds pet by id")
+    @Test(description = "User finds pet by id")
     public void findPet() {
         Pet petResponse = petsController.findPetById(pet, "get");
         petsController.verifyStatusCode(pet, 200);
@@ -47,21 +47,21 @@ public class FindPetByIdTest {
         Assert.assertEquals(pet.getStatus(), Status.available);
     }
 
-    @Test(priority = 2, description = "User tries to find pet with invalid parameter(s)")
+    @Test(description = "User tries to find pet with invalid parameter(s)")
     public void findPetWithInvalidParameter() {
         pet.setId("7697698769878608769769757657654754365436543");
         Pet petResponse = petsController.findPetById(pet, "get");
         petsController.verifyStatusCode(pet, 400);
     }
 
-    @Test(priority = 3, description = "User tries to find pet with empty parameter(s)")
+    @Test(description = "User tries to find pet with empty parameter(s)")
     public void findPetWithEmptyParameter() {
         pet.setId("");
         Pet petResponse = petsController.findPetById(pet, "get");
         petsController.verifyStatusCode(pet, 404);
     }
 
-    @Test(priority = 4, description = "User tries to find pet using invalid method")
+    @Test(description = "User tries to find pet using invalid method")
     public void findPetWithInvalidMethod() {
         pet.setId("");
         Pet petResponse = petsController.findPetById(pet, "patch");

@@ -38,20 +38,20 @@ public class DeleteAPetTest {
     }
 
 
-    @Test(priority = 1, description = "User deletes pet by id")
+    @Test(description = "User deletes pet by id")
     public void deletePetAndDoCheck() {
         petsController.deletePet(pet);
         petsController.verifyPetDeleted(pet);
     }
 
-    @Test(priority = 2, description = "User tries to delete pet with invalid petId")
+    @Test(description = "User tries to delete pet with invalid petId")
     public void addNewPetWithInvalidId() {
         pet.setId("-7");
         petsController.deletePet(pet);
         petsController.verifyStatusCode(pet, 400);
     }
 
-    @Test(priority = 3, description = "User tries to delete pet with empty petId")
+    @Test(description = "User tries to delete pet with empty petId")
     public void addNewPetWithEmptyName() {
         pet.setName("");
         petsController.deletePet(pet);

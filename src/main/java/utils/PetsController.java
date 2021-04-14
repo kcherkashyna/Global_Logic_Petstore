@@ -27,17 +27,16 @@ public class PetsController {
         responseSpecification = new ResponseSpecBuilder().expectContentType(ContentType.JSON).build();
     }
 
-    public Pet addNewPet(Pet pet, String method) {
-        if (method == "post") {
-            given(requestSpecification)
-                    .body(pet)
-                    .post(PET_ENDPOINT).as(Pet.class);
-        } else {
-            given(requestSpecification)
-                    .body(pet)
-                    .patch(PET_ENDPOINT).as(Pet.class);
-        }
-        return pet;
+    public Pet addNewPet(Pet pet) {
+        return given(requestSpecification)
+                .body(pet)
+                .post(PET_ENDPOINT).as(Pet.class);
+    }
+
+    public Pet addNewPetUsingWrongMethod(Pet pet) {
+        return given(requestSpecification)
+                .body(pet)
+                .patch(PET_ENDPOINT).as(Pet.class);
     }
 
     public void getPetsByStatus(Pet pet, String status, String method, int code) {

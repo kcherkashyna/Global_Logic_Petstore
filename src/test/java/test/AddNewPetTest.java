@@ -19,18 +19,17 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 public class AddNewPetTest {
     private static final String PHOTO_URL = "https://en.wikipedia.org/wiki/Pallas%27s_cat#/media/File:Manoel.jpg";
-    private PetsController petsController;
-    private Pet pet;
-    private String id = "1";
-    private String petName = "Baaaarsik";
-    private String categoryName = "cats";
-    private String tagName = "pallas's cat";
+    private static final PetsController petsController = new PetsController();
+    private static final Pet pet = new Pet();
+    private static final String id = "1";
+    private static final String petName = "Baaaarsik";
+    private static final String categoryName = "cats";
+    private static final String tagName = "pallas's cat";
 
 
     @BeforeMethod
     public void beforeMethod() {
-        petsController = new PetsController();
-        pet = new Pet();
+
         pet.setId(id);
         pet.setName(petName);
         pet.setPhotoUrls(Collections.singletonList(PHOTO_URL));
@@ -40,9 +39,9 @@ public class AddNewPetTest {
     }
 
 
-    @Test(priority = 1, description = "User adds a new pet to the store with valid input parameters")
+    @Test(description = "User adds a new pet to the store with valid input parameters")
     public void addNewPet() {
-        Pet petResponse = petsController.addNewPet(pet, "post");
+        Pet petResponse = petsController.addNewPet(pet);
         petsController.verifyStatusCode(pet, 200);
         assertThat(petResponse, is(samePropertyValuesAs(pet)));
         Assert.assertEquals(pet.getId(), id);
@@ -50,23 +49,23 @@ public class AddNewPetTest {
         Assert.assertEquals(pet.getStatus(), Status.available);
     }
 
-    @Test(priority = 2, description = "User tries to add a new pet to the store with invalid parameter(s)")
+    @Test(description = "User tries to add a new pet to the store with invalid parameter(s)")
     public void addNewPetWithInvalidId() {
         pet.setId("-7");
-        Pet petResponse = petsController.addNewPet(pet, "post");
+        Pet petResponse = petsController.addNewPet(pet);
         petsController.verifyStatusCode(pet, 400);
     }
 
-    @Test(priority = 3, description = "User tries to add a new pet to the store with empty parameter(s)")
+    @Test(description = "User tries to add a new pet to the store with empty parameter(s)")
     public void addNewPetWithEmptyName() {
         pet.setName("");
-        Pet petResponse = petsController.addNewPet(pet, "post");
+        Pet petResponse = petsController.addNewPet(pet);
         petsController.verifyStatusCode(pet, 404);
     }
 
-    @Test(priority = 4, description = "User tries to add a new pet to the store with invalid method")
+    @Test(description = "User tries to add a new pet to the store with invalid method")
     public void addNewPetWithInvalidMethod() {
-        Pet petResponse = petsController.addNewPet(pet, "patch");
+        Pet petResponse = petsController.addNewPet(pet);
         petsController.verifyStatusCode(pet, 405);
     }
 

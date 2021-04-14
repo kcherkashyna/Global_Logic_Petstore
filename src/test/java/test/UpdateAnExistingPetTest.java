@@ -40,7 +40,7 @@ public class UpdateAnExistingPetTest {
     }
 
 
-    @Test(priority = 1, description = "User updates parameter(s) of the existing pet")
+    @Test(description = "User updates parameter(s) of the existing pet")
     public void updatePet() {
         pet.setName("Murka");
         Pet petResponse = petsController.updatePet(pet);
@@ -51,7 +51,7 @@ public class UpdateAnExistingPetTest {
         Assert.assertEquals(pet.getStatus(), Status.available);
     }
 
-    @Test(priority = 2, description = "User tries to update a pet using invalid parameter(s)")
+    @Test(description = "User tries to update a pet using invalid parameter(s)")
     public void updatePetWithInvalidParameters() {
         pet.setId("-2");
         pet.setName("Murka");
@@ -59,7 +59,7 @@ public class UpdateAnExistingPetTest {
         petsController.verifyStatusCode(pet, 400);
     }
 
-    @Test(priority = 3, description = "User tries to update a pet using empty parameter(s)")
+    @Test(description = "User tries to update a pet using empty parameter(s)")
     public void updatePetWithEmptyParameters() {
         pet.setId("");
         pet.setName("");
