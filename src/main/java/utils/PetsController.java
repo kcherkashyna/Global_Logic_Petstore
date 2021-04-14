@@ -43,12 +43,15 @@ public class PetsController {
         if (status == "1" && method == "get") {
             given(requestSpecification)
                     .queryParam("status", Status.available.toString())
+                    //Constant
                     .get(PET_ENDPOINT + "/findByStatus")
                     .then().log().all()
                     .assertThat().spec(responseSpecification).and().statusCode(code);
+            //Constant
         } else if (status == "2" && method == "get") {
             given(requestSpecification)
                     .queryParam("status", Status.pending.toString())
+                    //Constant
                     .get(PET_ENDPOINT + "/findByStatus")
                     .then().log().all()
                     .assertThat().spec(responseSpecification).and().statusCode(code);
