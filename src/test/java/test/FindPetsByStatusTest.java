@@ -17,21 +17,21 @@ public class FindPetsByStatusTest {
     private static final String PHOTO_URL = "https://en.wikipedia.org/wiki/Pallas%27s_cat#/media/File:Manoel.jpg";
     private PetsController petsController;
     private Pet pet;
-    private static final String id = "1";
-    private static final String petName = "Baaaarsik";
-    private static final String categoryName = "cats";
-    private static final String tagName = "pallas's cat";
+    private static final String ID = "1";
+    private static final String PET_NAME = "Baaaarsik";
+    private static final String CATEGORY_NAME = "cats";
+    private static final String TAG_NAME = "pallas's cat";
 
     @BeforeMethod
     public void beforeMethod() {
         petsController = new PetsController();
         pet = new Pet();
-        pet.setId(id);
-        pet.setName(petName);
+        pet.setId(ID);
+        pet.setName(PET_NAME);
         pet.setPhotoUrls(Collections.singletonList(PHOTO_URL));
         pet.setStatus(Status.available);
-        pet.setTags(Collections.singletonList(new Tag(id, tagName)));
-        pet.setCategory(new Category(id, categoryName));
+        pet.setTags(Collections.singletonList(new Tag(ID, TAG_NAME)));
+        pet.setCategory(new Category(ID, CATEGORY_NAME));
     }
 
     @Test(description = "User finds pets by status available")

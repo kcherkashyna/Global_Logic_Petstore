@@ -6,9 +6,16 @@
             <class name="test.AddNewPetTest">
                 <methods>
                     <include name="addNewPet"/>
-                    <include name="addNewPetWithInvalidId"/>
-                    <include name="addNewPetWithEmptyName"/>
+                    <include name="addNewPetWithInvalidParameter"/>
+                    <include name="addNewPetWithEmptyParameter"/>
                     <include name="addNewPetWithInvalidMethod"/>
+                </methods>
+            </class>
+            <class name="test.DeleteAPetTest">
+                <methods>
+                    <include name="deletePetAndDoCheck"/>
+                    <include name="deletePetWithInvalidParameter"/>
+                    <include name="deletePetWithEmptyParameter"/>
                 </methods>
             </class>
             <class name="test.FindPetByIdTest">
@@ -34,7 +41,6 @@
                     <include name="updatePet"/>
                     <include name="updatePetWithInvalidParameters"/>
                     <include name="updatePetWithEmptyParameters"/>
-                    <include name="updatePetWithInvalidMethod"/>
                 </methods>
             </class>
             <class name="test.UpdateUsingPostMethodTest">
@@ -42,14 +48,6 @@
                     <include name="updatePet"/>
                     <include name="updatePetWithInvalidParameters"/>
                     <include name="updatePetWithEmptyParameters"/>
-                    <include name="updatePetWithInvalidMethod"/>
-                </methods>
-            </class>
-            <class name="test.DeleteAPetTest">
-                <methods>
-                    <include name="deletePetAndDoCheck"/>
-                    <include name="addNewPetWithInvalidId"/>
-                    <include name="addNewPetWithEmptyName"/>
                 </methods>
             </class>
         </classes>

@@ -20,28 +20,27 @@ public class FindPetByIdTest {
     private static final String PHOTO_URL = "https://en.wikipedia.org/wiki/Pallas%27s_cat#/media/File:Manoel.jpg";
     private PetsController petsController;
     private Pet pet;
-    private String id = "1";
-    private String petName = "Baaaarsik";
-    private String categoryName = "cats";
-    private String tagName = "pallas's cat";
-    private String status = Status.available.toString();
+    private static final String ID = "1";
+    private static final String PET_NAME = "Baaaarsik";
+    private static final String CATEGORY_NAME = "cats";
+    private static final String TAG_NAME = "pallas's cat";
 
 
     @BeforeMethod
     public void beforeMethod() {
         petsController = new PetsController();
         pet = new Pet();
-        pet.setId(id);
-        pet.setName(petName);
+        pet.setId(ID);
+        pet.setName(PET_NAME);
         pet.setPhotoUrls(Collections.singletonList(PHOTO_URL));
         pet.setStatus(Status.available);
-        pet.setTags(Collections.singletonList(new Tag(id, tagName)));
-        pet.setCategory(new Category(id, categoryName));
+        pet.setTags(Collections.singletonList(new Tag(ID, TAG_NAME)));
+        pet.setCategory(new Category(ID, CATEGORY_NAME));
     }
 
     @Test(description = "User finds pet by id")
     public void findPet() {
-        Pet petResponse = petsController.findPetByIdAndCheckStatusCode(pet, HTTP_OK);
+        var petResponse = petsController.findPetByIdAndCheckStatusCode(pet, HTTP_OK);
         assertThat(petResponse, equalTo(pet));
         assertThat(petResponse.getId(), is(pet.getId()));
         assertThat(petResponse.getName(), is(pet.getName()));

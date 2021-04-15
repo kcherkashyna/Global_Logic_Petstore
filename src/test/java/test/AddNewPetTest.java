@@ -21,27 +21,27 @@ public class AddNewPetTest {
     private PetsController petsController;
     private Pet pet;
     //TODO replace with constants
-    private static final String id = "1";
-    private static final String petName = "Baaaarsik";
-    private static final String categoryName = "cats";
-    private static final String tagName = "pallas's cat";
+    private static final String ID = "1";
+    private static final String PET_NAME = "Baaaarsik";
+    private static final String CATEGORY_NAME = "cats";
+    private static final String TAG_NAME = "pallas's cat";
 
 
     @BeforeMethod
     public void beforeMethod() {
         petsController = new PetsController();
         pet = new Pet();
-        pet.setId(id);
-        pet.setName(petName);
+        pet.setId(ID);
+        pet.setName(PET_NAME);
         pet.setPhotoUrls(Collections.singletonList(PHOTO_URL));
         pet.setStatus(Status.available);
-        pet.setTags(Collections.singletonList(new Tag(id, tagName)));
-        pet.setCategory(new Category(id, categoryName));
+        pet.setTags(Collections.singletonList(new Tag(ID, TAG_NAME)));
+        pet.setCategory(new Category(ID, CATEGORY_NAME));
     }
 
     @Test(description = "User adds a new pet to the store with valid input parameters")
     public void addNewPet() {
-        Pet petResponse = petsController.addNewPetAndCheckStatusCode(pet, HTTP_OK);
+        var petResponse = petsController.addNewPetAndCheckStatusCode(pet, HTTP_OK);
         assertThat(petResponse, equalTo(pet));
         assertThat(petResponse, is(pet));
         assertThat(petResponse.getId(), is(pet.getId()));
